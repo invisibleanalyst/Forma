@@ -1,0 +1,8 @@
+node_modules
+.next
+package-lock.json
+public/*.svg
+docs/product-specification.md
+
+test-results
+playwright-report
