@@ -48,3 +48,9 @@ The new transaction-style layout uses only fictional example content, with three
 Validation for this update includes 14 unit tests (the previous 10 plus four template/model tests), TypeScript, lint, a production build, and browser coverage for editing the heading/right-hand fields, saving/reopening, and checking the demo bands in actual PNG/JPEG/WebP downloads. The complete production browser run passed 20 tests, with two device-specific skips. Existing editor/export/browser flows remain in the regression suite. The v4 screenshots document the new desktop and mobile workflow.
 
 The change does not implement OCR or automatic editing of rasterized screenshot text. It does not modify the user's original uploaded transaction screenshot.
+
+## Framed-image viewer update
+
+The generated iPhone 17-style mockup is bundled as one static PNG. Mockup Studio provides a viewer and original-file download; it does not expose its transaction text as editable fields. The original generated file is retained outside the repository as well.
+
+Validation includes TypeScript, lint, production build and focused desktop/phone browser checks for opening/closing the viewer, loading the image and downloading bytes with the same SHA-256 as the bundled asset. Existing mockup rendering/export and responsive-overflow cases are included in the focused regression run. The v5 screenshots show the new viewer.

@@ -58,6 +58,14 @@ Open **Workspace → Open educational template**, or use the editor route `/edit
 
 See the [v4 educational screenshots](docs/screenshots/README.md#v4--educational-transaction-layout). Capture a new review version with `node scripts/demo-screenshots.mjs v5` after starting the app (`BASE_URL` can target a production server).
 
+## Framed screenshot example
+
+In **Mockup Studio**, choose **View framed screenshot** to see the generated iPhone 17-style presentation supplied in this conversation. **Download PNG** downloads that existing mockup image, byte for byte. The asset is bundled locally at `public/examples/iphone17-style-framed-screenshot.png`.
+
+This is a single-image viewer/download example. It does not create editable transaction text or replace the separately marked educational template. The frame is a generated visual approximation, not certified device hardware artwork.
+
+See the [v5 review screenshots](docs/screenshots/README.md#v5--framed-image-example). Capture a future version with `node scripts/framed-screenshots.mjs v6` after starting the app.
+
 ## Scope and remaining work
 
 This is a working first release, not completion of every production-readiness ambition in the specification.

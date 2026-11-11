@@ -1,0 +1,7 @@
+{
+  "version": "v5",
+  "capturedAt": "2026-11-11T13:54:46.538Z",
+  "feature": "Fixed generated phone-frame image viewer and original PNG download",
+  "browser": "Chromium",
+  "files": 3
+}

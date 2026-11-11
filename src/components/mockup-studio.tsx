@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import type Konva from 'konva';
 import { Download, ImagePlus, RotateCw, Smartphone, Upload } from 'lucide-react';
 import { Header, Footer, Toast } from './ui';
+import FramedExample from './framed-example';
 import { ColorField } from './editor/properties';
 import { readImage, downloadDataURL } from '@/lib/import';
 export interface MockupOptions {
@@ -80,6 +81,7 @@ export default function MockupStudio() {
             {exporting ? 'Preparing…' : 'Export mockup'}
           </button>
         </div>
+        <FramedExample />
         <div className="mockup-layout">
           <section
             className="mockup-preview"

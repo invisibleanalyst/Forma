@@ -2,6 +2,18 @@
 
 Real browser screenshots of the running Next.js application. Each folder is preserved so changes can be compared over time. Captures use Chromium, a 1440 × 1000 desktop viewport, and iPhone 13 emulation (390 × 664 CSS pixels, 3× raster density). These are browser captures, not design mockups or proof of physical-device testing.
 
+## v5 — framed image example
+
+The generated phone-frame image is now available in Mockup Studio as a fixed image viewer with an original-PNG download. Its transaction text is not editable.
+
+[Capture metadata](v5/capture.json)
+
+![Framed example in Mockup Studio](v5/01-framed-example-studio.png)
+
+![Desktop image viewer](v5/02-framed-example-desktop.png)
+
+<img src="v5/03-framed-example-mobile.png" alt="Phone view of the fixed framed-image example" width="340" />
+
 ## v4 — educational transaction layout
 
 A new fictional, layered example for practicing edits to the heading and right-hand fields. These captures show a template, not an altered real transaction screenshot. Demo markings remain visible in the canvas and export.
@@ -78,4 +90,4 @@ The first functional capture, retained as an earlier version. Visual review of t
 
 ## Add a version
 
-Start the application, then run `npm run screenshots -- v5`. Set `BASE_URL` to target another running server. The script refuses to overwrite a completed version folder. Add the new folder to this index and commit it with the corresponding source changes.
+Start the application, then run `npm run screenshots -- v6`. Set `BASE_URL` to target another running server. The script refuses to overwrite a completed version folder. Add the new folder to this index and commit it with the corresponding source changes.
