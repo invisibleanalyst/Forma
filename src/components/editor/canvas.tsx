@@ -5,6 +5,7 @@ import Konva from 'konva';
 import type { Project } from '@/lib/document';
 import { useEditor } from '@/lib/store';
 import { SceneLayer } from './scene';
+import DemoMark from './demo-mark';
 export default function EditorCanvas({
   project,
   preview = false,
@@ -176,6 +177,7 @@ export default function EditorCanvas({
               onTextEdit={onTextEdit}
             />
           ))}
+          {project.demoKind && <DemoMark width={project.width} height={project.height} />}
           {!preview && (
             <Transformer
               ref={transformer}

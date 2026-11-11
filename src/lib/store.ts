@@ -39,8 +39,19 @@ export const useEditor = create<EditorState>((set, get) => ({
   commit: (fn) => {
     const s = get();
     if (!s.project) return;
+    const next = fn(s.project);
     set({
-      project: { ...fn(s.project), updatedAt: Date.now() },
+      project: {
+        ...next,
+        ...(s.project.demoKind
+          ? {
+              demoKind: s.project.demoKind,
+              width: Math.max(600, next.width),
+              height: Math.max(1000, next.height),
+            }
+          : {}),
+        updatedAt: Date.now(),
+      },
       past: [...s.past, s.project].slice(-60),
       future: [],
       dirty: true,

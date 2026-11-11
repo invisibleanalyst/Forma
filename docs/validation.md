@@ -40,3 +40,11 @@ These results establish the current browser implementation, not physical-phone c
 No production deployment or Git push was performed. Source files, assets, tests, screenshots and instructions are in the local repository checkout for review.
 
 The cloud configuration draft API repeatedly returned `INVALID_ARGUMENT` (“The current environment draft could not be verified”). No reusable configuration draft was saved or published. Installation/start commands remain documented in the README and can be run independently of that service.
+
+## Educational-template update
+
+The new transaction-style layout uses only fictional example content, with three canvas bands that identify it as a demonstration. The marks are outside the user-editable layers; export reapplies them in document coordinates after rendering the design.
+
+Validation for this update includes 14 unit tests (the previous 10 plus four template/model tests), TypeScript, lint, a production build, and browser coverage for editing the heading/right-hand fields, saving/reopening, and checking the demo bands in actual PNG/JPEG/WebP downloads. The complete production browser run passed 20 tests, with two device-specific skips. Existing editor/export/browser flows remain in the regression suite. The v4 screenshots document the new desktop and mobile workflow.
+
+The change does not implement OCR or automatic editing of rasterized screenshot text. It does not modify the user's original uploaded transaction screenshot.

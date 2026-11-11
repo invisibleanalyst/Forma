@@ -36,6 +36,7 @@ import { getProject, saveProject } from '@/lib/storage';
 import { readImage } from '@/lib/import';
 import { sampleProject } from '@/lib/document';
 import { renderExport } from '@/lib/export';
+import { transactionDemo } from '@/lib/demo-template';
 const Canvas = dynamic(() => import('./canvas'), {
   ssr: false,
   loading: () => <div className="canvas-loading">Preparing your canvas…</div>,
@@ -67,7 +68,9 @@ export default function Editor() {
           if (!active) return;
           if (!p) throw new Error('This project is no longer available in this browser.');
           useEditor.getState().load(p);
-        } else if (!useEditor.getState().project) useEditor.getState().load(sampleProject());
+        } else if (new URLSearchParams(location.search).get('template') === 'transaction-demo')
+          useEditor.getState().load(transactionDemo());
+        else if (!useEditor.getState().project) useEditor.getState().load(sampleProject());
         if (active) setReady(true);
       } catch (e) {
         if (active) setInitError((e as Error).message);
@@ -343,6 +346,19 @@ export default function Editor() {
             importImage(e.dataTransfer.files[0]);
           }}
         >
+          {p.demoKind && (
+            <div className="demo-editor-notice">
+              <span>Educational template · fictional data</span>
+              <button
+                onClick={() => {
+                  s.select(null);
+                  setSheet('properties');
+                }}
+              >
+                Edit template fields
+              </button>
+            </div>
+          )}
           <div className="canvas-breadcrumb">
             <span>{p.name}</span>
             <span>

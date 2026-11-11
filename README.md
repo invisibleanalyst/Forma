@@ -41,9 +41,22 @@ Playwright uses `/usr/bin/chromium` in this cloud environment. On another machin
 - Up to 60 undo snapshots with redo; dragging/resizing creates one history entry per completed interaction. Keyboard shortcuts: Ctrl/⌘ Z, Ctrl/⌘ Shift Z, Ctrl/⌘ Y, Ctrl/⌘ S, Ctrl/⌘ D, Delete/Backspace, arrows (Shift for 10px), V, H and Escape.
 - `/projects`: IndexedDB save/reopen, rename, duplicate and confirmed deletion; debounced autosave after changes, manual Save and storage failure feedback. Saving an editable project is separate from downloading an image.
 - PNG, JPEG and browser-supported WebP export; preview, name, half/original/double resolution, dimension limits, transparent PNG/WebP and white JPEG fallback. Exports use document coordinates independent of viewport zoom, without selection handles or canvas shadow. Native sharing is attempted when supported, with download fallback.
-- `/mockups`: original generic iPhone-style and Android-style frames, portrait/landscape, screenshot placement (cover fit), background, bezel, shadow, time, battery, network, Wi-Fi and status text styling. 1600 × 1600 PNG exports visibly marked as design previews. No financial transaction templates.
+- `/mockups`: original generic iPhone-style and Android-style frames, portrait/landscape, screenshot placement (cover fit), background, bezel, shadow, time, battery, network, Wi-Fi and status text styling. 1600 × 1600 PNG exports visibly marked as design previews. Transaction-style examples are available separately as permanently marked educational templates.
 - Mobile bottom tools and dismissible properties/layer sheets, safe-area spacing, reduced-motion rules, accessible labels, keyboard-focus outlines and native modal focus handling.
 - PWA manifest, raster app icons, service worker and same-origin visited-asset caching in production. Cached editor functionality can work offline after an online visit and service worker activation.
+
+## Editing a screenshot-style layout (educational template)
+
+Open **Workspace → Open educational template**, or use the editor route `/editor?template=transaction-demo`.
+
+- Choose **Edit template fields** to change the heading, screen time, supporting amount, status, address, price, network, fee, demo ID, timestamp and reference. On phones this opens the properties sheet.
+- Click any text on the canvas or select its layer to change its font, size, alignment, position and other properties. These remain real text layers, not flattened image pixels.
+- Save and reopen the editable project normally. Export PNG, JPEG or WebP with the existing export dialog.
+- The template uses fictional data, simulation status and demo identifiers. It provides no payment verification or blockchain proof links. A visible **DEMO — NOT A REAL TRANSACTION** marking is rendered independently of the layers and reapplied during export. It cannot be removed through layer controls. The minimum demo canvas is 600 × 1000 pixels.
+
+**Importing a PNG/JPEG/WebP does not extract its original text.** An uploaded screenshot is one image layer; its original heading and right-hand values do not become individually editable. This template demonstrates the same kind of layout with editable fictional content. OCR, automatic text detection, background reconstruction and original-font matching are not implemented.
+
+See the [v4 educational screenshots](docs/screenshots/README.md#v4--educational-transaction-layout). Capture a new review version with `node scripts/demo-screenshots.mjs v5` after starting the app (`BASE_URL` can target a production server).
 
 ## Scope and remaining work
 

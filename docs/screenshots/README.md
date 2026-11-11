@@ -2,6 +2,18 @@
 
 Real browser screenshots of the running Next.js application. Each folder is preserved so changes can be compared over time. Captures use Chromium, a 1440 × 1000 desktop viewport, and iPhone 13 emulation (390 × 664 CSS pixels, 3× raster density). These are browser captures, not design mockups or proof of physical-device testing.
 
+## v4 — educational transaction layout
+
+A new fictional, layered example for practicing edits to the heading and right-hand fields. These captures show a template, not an altered real transaction screenshot. Demo markings remain visible in the canvas and export.
+
+[Capture metadata](v4/capture.json)
+
+![Educational template with editable fields](v4/01-educational-fields-desktop.png)
+
+![Export preview retaining the demo marking](v4/02-educational-export-desktop.png)
+
+<img src="v4/03-educational-canvas-mobile.png" alt="Educational template canvas on a phone" width="340" /> <img src="v4/04-educational-fields-mobile.png" alt="Editable educational fields in the mobile sheet" width="340" />
+
 ## v3 — reviewed first release
 
 The latest review set includes responsive device-preview scaling, consistent screen-sized transform handles on mobile, crop/reset sizing fixes, and friendlier numeric entry.
@@ -66,4 +78,4 @@ The first functional capture, retained as an earlier version. Visual review of t
 
 ## Add a version
 
-Start the application, then run `npm run screenshots -- v4`. Set `BASE_URL` to target another running server. The script refuses to overwrite a completed version folder. Add the new folder to this index and commit it with the corresponding source changes.
+Start the application, then run `npm run screenshots -- v5`. Set `BASE_URL` to target another running server. The script refuses to overwrite a completed version folder. Add the new folder to this index and commit it with the corresponding source changes.

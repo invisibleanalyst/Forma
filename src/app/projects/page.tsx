@@ -52,6 +52,22 @@ export default function Projects() {
             <Plus size={17} /> New project
           </button>
         </div>
+        <section className="learning-template-card">
+          <div>
+            <span className="eyebrow">LEARN BY EDITING</span>
+            <h2>A screenshot is flat. A template is editable.</h2>
+            <p>
+              Practice editing a heading and right-hand fields with a fictional transaction layout.
+              Includes permanent demo markings.
+            </p>
+          </div>
+          <button
+            className="button secondary small"
+            onClick={() => router.push('/editor?template=transaction-demo')}
+          >
+            Open educational template <ArrowRight size={16} />
+          </button>
+        </section>
         <div className="projects-subheading">
           <h2>
             All projects <span>{projects.length}</span>

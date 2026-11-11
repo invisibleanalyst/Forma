@@ -1,5 +1,6 @@
 export type LayerKind = 'text' | 'rect' | 'ellipse' | 'line' | 'image';
 export interface Layer {
+  templateField?: string;
   id: string;
   name: string;
   kind: LayerKind;
@@ -31,6 +32,7 @@ export interface Layer {
   crop?: { x: number; y: number; width: number; height: number };
 }
 export interface Project {
+  demoKind?: 'transaction-layout';
   id: string;
   name: string;
   width: number;

@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { useEditor } from '@/lib/store';
 import type { Layer } from '@/lib/document';
+import DemoFields from './demo-fields';
 export function NumberField({
   label,
   value,
@@ -99,7 +100,11 @@ export default function Properties() {
       </div>
       {!l ? (
         <>
-          <p className="property-hint">A little space for your next idea.</p>
+          {p.demoKind ? (
+            <DemoFields />
+          ) : (
+            <p className="property-hint">A little space for your next idea.</p>
+          )}
           <div className="property-section">
             <span className="section-label">DOCUMENT</span>
             <div className="field-row">
