@@ -21,3 +21,9 @@ The first release prioritizes a working foundation. Advanced gestures, browser/d
 - `src/app/`: home, editor, projects and mockup routes.
 - `tests/`: document/history unit tests and real browser flows.
 - `scripts/screenshots.mjs`: reproducible review captures, preserving old version folders.
+
+## Studio-first iteration
+
+The default route now renders Mockup Studio. The previous editor/project routes and their storage remain available through More; the studio no longer offers Android. A new typed mockup module contains iPhone 15/16/17-style visual presets and fit/placement geometry. The canvas now sizes its interactive Stage to the display and scales a canonical scene, avoiding the pointer-coordinate mismatch caused by stretching an 800px canvas through CSS. `src/lib/mockup-export.ts` exports the canonical scene at exactly 1600 × 1600 independently of preview size. Touch dragging and numeric placement controls share the same screen-coordinate model.
+
+The existing Dark palette is retained alongside Light and the added Black palette. The shared theme control stores the chosen mode. Optional top-status-area replacement provides a normal time/Wi-Fi/battery/island presentation without generating an active-call timer.

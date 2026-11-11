@@ -2,6 +2,22 @@
 
 Real browser screenshots of the running Next.js application. Each folder is preserved so changes can be compared over time. Captures use Chromium, a 1440 × 1000 desktop viewport, and iPhone 13 emulation (390 × 664 CSS pixels, 3× raster density). These are browser captures, not design mockups or proof of physical-device testing.
 
+## v6 — iPhone studio and Black theme
+
+Mockup Studio is now the primary workspace. Android and the marketing-led homepage are removed from the main flow. These real app captures show Light, the existing Dark palette, the new Black palette, an illustrative Silver iPhone 15-style frame, and the phone layout. The sample screenshot was captured from Forma's original placeholder UI and uploaded through the file input.
+
+[Capture metadata](v6/capture.json)
+
+![Studio in Light theme](v6/01-studio-light.png)
+
+![Existing Dark theme](v6/02-studio-dark.png)
+
+![Black theme and Ink backdrop](v6/03-studio-black.png)
+
+![Silver iPhone 15-style preset](v6/04-iphone15-silver.png)
+
+<img src="v6/05-studio-mobile.png" alt="Studio on a phone with image placement controls" width="340" />
+
 ## v5 — framed image example
 
 The generated phone-frame image is now available in Mockup Studio as a fixed image viewer with an original-PNG download. Its transaction text is not editable.
@@ -90,4 +106,4 @@ The first functional capture, retained as an earlier version. Visual review of t
 
 ## Add a version
 
-Start the application, then run `npm run screenshots -- v6`. Set `BASE_URL` to target another running server. The script refuses to overwrite a completed version folder. Add the new folder to this index and commit it with the corresponding source changes.
+Start the application, then run `npm run screenshots -- v7`. Set `BASE_URL` to target another running server. The script refuses to overwrite a completed version folder. Add the new folder to this index and commit it with the corresponding source changes.

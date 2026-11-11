@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "screenshots": "node scripts/screenshots.mjs",
+    "screenshots": "node scripts/studio-screenshots.mjs",
     "test:offline": "node scripts/offline-smoke.mjs",
     "format": "prettier --write src tests scripts"
   },

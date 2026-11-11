@@ -15,23 +15,29 @@ async function closeSheet(page: Page) {
   if (await page.getByRole('button', { name: 'Close properties' }).isVisible())
     await page.getByRole('button', { name: 'Close properties' }).click();
 }
-test('homepage opens a real sample and remembers theme', async ({ page }) => {
+test('studio homepage remembers dark and black theme preferences', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Every image,your canvas.');
-  await page.getByRole('button', { name: 'Toggle color theme' }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Your screen. A better frame.');
+  await page.getByRole('combobox', { name: 'Color theme', exact: true }).selectOption('dark');
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-  await page.getByRole('button', { name: 'Explore this canvas' }).click();
-  await expect(page).toHaveURL(/\/editor/);
-  await expect(page.getByRole('textbox', { name: 'Project name', exact: true })).toHaveValue(
-    'A little room to grow',
+  await page.getByRole('combobox', { name: 'Color theme', exact: true }).selectOption('black');
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'black');
+  expect(await page.locator('body').evaluate((el) => getComputedStyle(el).backgroundColor)).toBe(
+    'rgb(0, 0, 0)',
   );
+  await expect(page.getByRole('button', { name: 'iPhone 17-style', exact: true })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+  await expect(page.getByRole('button', { name: /android/i })).toHaveCount(0);
 });
 test('creates a custom project, edits text, undoes and redoes, and reopens a local save', async ({
   page,
 }) => {
-  await page.goto('/');
-  await page.getByRole('button', { name: 'Start creating' }).click();
+  await page.goto('/projects');
+  await page.getByRole('button', { name: 'New project', exact: true }).click();
   const dialog = page.getByRole('dialog');
   await dialog.getByLabel('Project name').fill('My first canvas');
   await dialog.getByLabel('Width (px)').fill('800');
@@ -178,7 +184,7 @@ test('project workspace renames, duplicates and deletes projects', async ({ page
     page.getByRole('button', { name: 'Open Renamed project copy', exact: true }),
   ).toHaveCount(0);
 });
-test('mockup studio renders both devices, landscape and custom screenshot, and exports', async ({
+test('mockup studio renders iPhone presets, landscape and custom screenshot, and exports', async ({
   page,
 }) => {
   await page.goto('/mockups');
@@ -187,15 +193,17 @@ test('mockup studio renders both devices, landscape and custom screenshot, and e
   const sceneBounds = await page.locator('canvas').boundingBox();
   expect(Math.abs(sceneBounds!.width - previewBounds!.width)).toBeLessThan(2);
   expect(Math.abs(sceneBounds!.height - previewBounds!.height)).toBeLessThan(2);
-  await page.getByRole('button', { name: /Studio Android/ }).click();
+  await page.getByRole('button', { name: 'iPhone 16-style', exact: true }).click();
+  await page.getByRole('button', { name: 'iPhone 17-style', exact: true }).click();
   await page.getByRole('button', { name: /Portrait · Rotate/ }).click();
-  await page.getByRole('textbox', { name: 'Demo time', exact: true }).fill('12:34');
+  await page.getByText('Screen details', { exact: true }).click();
+  await page.getByRole('textbox', { name: 'Status time', exact: true }).fill('12:34');
   await page.getByLabel('Upload interface screenshot').setInputFiles('public/icon-192.png');
   await page.waitForTimeout(300);
   const promise = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Export mockup', exact: true }).click();
   const download = await promise;
-  expect(download.suggestedFilename()).toBe('forma-android-design-preview.png');
+  expect(download.suggestedFilename()).toBe('forma-iphone17-design-preview.png');
   const path = await download.path();
   expect((await fs.stat(path!)).size).toBeGreaterThan(4000);
 });

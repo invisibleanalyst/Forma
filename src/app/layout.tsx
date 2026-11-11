@@ -3,9 +3,9 @@ import '@fontsource-variable/outfit';
 import './globals.css';
 import Pwa from '@/components/pwa';
 export const metadata: Metadata = {
-  title: 'Forma — Every image, your canvas.',
+  title: 'Forma — iPhone Mockup Studio',
   description:
-    'Your private creative workspace. Edit images, create designs, and make room for your ideas. Free, local, and beautifully simple.',
+    'Create iPhone-style device mockups in your browser. Choose a frame, add a screenshot, adjust its placement, and export.',
   manifest: '/manifest.webmanifest',
   icons: { icon: '/icon.svg', apple: '/icon-192.png' },
 };
@@ -21,7 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem('forma-theme');document.documentElement.dataset.theme=t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}`,
+            __html: `try{var t=localStorage.getItem('forma-theme');document.documentElement.dataset.theme=(['light','dark','black'].includes(t)?t:null)||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}`,
           }}
         />
       </head>

@@ -1,4 +1,4 @@
-const CACHE = 'forma-v1';
+const CACHE = 'forma-studio-v6';
 const SHELL = [
   '/',
   '/editor',

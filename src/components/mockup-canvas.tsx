@@ -1,246 +1,375 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { Stage, Layer, Group, Rect, Text, Circle, Line, Image as KImage } from 'react-konva';
+import { useEffect, useRef, useState } from 'react';
+import { Stage, Layer, Group, Rect, Text, Circle, Image as KImage, Arc } from 'react-konva';
 import type Konva from 'konva';
-import type { MockupOptions } from './mockup-studio';
+import { type MockupOptions, screenSize, imagePlacement, clampOffset } from '@/lib/mockup';
 export default function MockupCanvas({
   options: o,
   onStage,
+  onPlacement,
+  onReady,
 }: {
   options: MockupOptions;
   onStage: (stage: Konva.Stage | null) => void;
+  onPlacement?: (patch: Partial<MockupOptions>) => void;
+  onReady?: (ready: boolean) => void;
 }) {
-  const [image, setImage] = useState<HTMLImageElement>();
+  const wrapper = useRef<HTMLDivElement>(null);
+  const [displaySize, setDisplaySize] = useState(800);
   useEffect(() => {
-    setImage(undefined);
-    if (!o.src) return;
+    if (!wrapper.current) return;
+    const observer = new ResizeObserver(([entry]) => {
+      if (entry.contentRect.width > 0) setDisplaySize(Math.floor(entry.contentRect.width));
+    });
+    observer.observe(wrapper.current);
+    return () => observer.disconnect();
+  }, []);
+  const [loaded, setLoaded] = useState<{ src: string; image: HTMLImageElement } | null>(null);
+  useEffect(() => {
     let active = true;
+    if (!o.src) {
+      onReady?.(true);
+      return;
+    }
+    onReady?.(false);
     const i = new window.Image();
     i.onload = () => {
-      if (active) setImage(i);
+      if (active) {
+        setLoaded({ src: o.src, image: i });
+      }
+    };
+    i.onerror = () => {
+      if (active) onReady?.(false);
     };
     i.src = o.src;
     return () => {
       active = false;
     };
-  }, [o.src]);
-  const sw = 270,
-    sh = o.device === 'ios' ? 585 : 600;
-  const bw = o.landscape ? sh : sw,
-    bh = o.landscape ? sw : sh;
+  }, [o.src, onReady]);
+  const image = loaded?.src === o.src ? loaded.image : undefined;
+  useEffect(() => {
+    if (!image) return;
+    const frame = requestAnimationFrame(() => onReady?.(true));
+    return () => cancelAnimationFrame(frame);
+  }, [image, onReady]);
+  const { preset, width: bw, height: bh } = screenSize(o);
+  const bezel = o.bezel ? preset.bezel : 0;
   const x = (800 - bw) / 2,
-    y = (800 - bh) / 2 - 5;
-  const fg = o.statusDark ? '#182b20' : '#ffffff';
-  const scale = image ? Math.max(bw / image.width, bh / image.height) : 1;
+    y = (800 - bh) / 2;
+  const placement = image ? imagePlacement(image.width, image.height, bw, bh, o) : null;
+  const fg = o.statusDark ? '#152018' : '#fff';
+  const silver = o.frame === 'silver';
+  const foreground = ['#000000', '#09090b', '#0b0d10'].includes(o.background.toLowerCase())
+    ? '#bdc2bf'
+    : '#5b625e';
   return (
-    <div className="mockup-canvas-container">
-      <Stage width={800} height={800} ref={onStage}>
-        <Layer>
+    <div className="mockup-canvas-container" ref={wrapper}>
+      <Stage width={displaySize} height={displaySize} ref={onStage}>
+        <Layer name="mockup-scene" scaleX={displaySize / 800} scaleY={displaySize / 800}>
           <Rect width={800} height={800} fill={o.background} />
           <Text
-            x={48}
-            y={42}
+            x={40}
+            y={35}
             text="FORMA / MOCKUP STUDIO"
             fontFamily="Outfit Variable"
-            fontSize={13}
-            fill="#52634c"
+            fontSize={11}
+            fill={foreground}
             letterSpacing={2}
           />
+          <Text
+            x={40}
+            y={35}
+            width={720}
+            text={preset.name.toUpperCase() + '-STYLE'}
+            align="right"
+            fontFamily="Outfit Variable"
+            fontSize={10}
+            fill={foreground}
+            letterSpacing={1.5}
+          />
           <Group x={x} y={y}>
+            {o.bezel && (
+              <Group listening={false}>
+                <Rect
+                  x={-bezel - 3}
+                  y={bh * 0.17}
+                  width={3}
+                  height={18}
+                  cornerRadius={2}
+                  fill={silver ? '#aeb2b6' : '#4a4d52'}
+                />
+                <Rect
+                  x={-bezel - 3}
+                  y={bh * 0.23}
+                  width={3}
+                  height={39}
+                  cornerRadius={2}
+                  fill={silver ? '#bfc2c5' : '#4a4d52'}
+                />
+                <Rect
+                  x={-bezel - 3}
+                  y={bh * 0.32}
+                  width={3}
+                  height={39}
+                  cornerRadius={2}
+                  fill={silver ? '#bfc2c5' : '#4a4d52'}
+                />
+                <Rect
+                  x={bw + bezel}
+                  y={bh * 0.25}
+                  width={3}
+                  height={65}
+                  cornerRadius={2}
+                  fill={silver ? '#aeb2b6' : '#4a4d52'}
+                />
+              </Group>
+            )}
             <Rect
-              x={o.bezel ? -10 : 0}
-              y={o.bezel ? -10 : 0}
-              width={bw + (o.bezel ? 20 : 0)}
-              height={bh + (o.bezel ? 20 : 0)}
-              fill="#222924"
-              stroke={o.bezel ? '#677066' : undefined}
-              strokeWidth={2}
-              cornerRadius={o.device === 'ios' ? 43 : 30}
-              shadowColor="#243b24"
-              shadowBlur={o.shadow ? 45 : 0}
-              shadowOpacity={0.25}
-              shadowOffsetY={22}
+              x={-bezel}
+              y={-bezel}
+              width={bw + bezel * 2}
+              height={bh + bezel * 2}
+              cornerRadius={preset.radius + bezel}
+              fillLinearGradientStartPoint={{ x: 0, y: 0 }}
+              fillLinearGradientEndPoint={{ x: bw, y: 40 }}
+              fillLinearGradientColorStops={
+                silver
+                  ? [0, '#73777e', 0.06, '#f1f2f3', 0.4, '#b5b8bd', 0.94, '#e2e4e6', 1, '#676b72']
+                  : [
+                      0,
+                      '#181a1e',
+                      0.04,
+                      '#898d93',
+                      0.09,
+                      '#2a2c31',
+                      0.9,
+                      '#2a2c31',
+                      0.97,
+                      '#73767c',
+                      1,
+                      '#15171b',
+                    ]
+              }
+              stroke={o.bezel ? '#70747a' : undefined}
+              strokeWidth={0.8}
+              shadowColor="#000"
+              shadowBlur={o.shadow ? 35 : 0}
+              shadowOpacity={0.32}
+              shadowOffsetY={18}
+            />
+            <Rect
+              x={-2}
+              y={-2}
+              width={bw + 4}
+              height={bh + 4}
+              cornerRadius={preset.radius + 2}
+              fill="#000"
             />
             <Group
+              name="screen-content"
               clipFunc={(ctx) => {
                 ctx.beginPath();
-                ctx.roundRect(0, 0, bw, bh, o.device === 'ios' ? 34 : 23);
+                ctx.roundRect(0, 0, bw, bh, preset.radius);
                 ctx.closePath();
               }}
             >
-              <Rect width={bw} height={bh} fill="#F7F7EF" />
-              {image ? (
+              <Rect width={bw} height={bh} fill="#08080b" />
+              {placement && image ? (
                 <KImage
+                  name="screen-image"
                   image={image}
-                  width={image.width * scale}
-                  height={image.height * scale}
-                  x={(bw - image.width * scale) / 2}
-                  y={(bh - image.height * scale) / 2}
+                  width={placement.width}
+                  height={placement.height}
+                  x={placement.x}
+                  y={placement.y}
+                  offsetX={placement.width / 2}
+                  offsetY={placement.height / 2}
+                  rotation={o.rotation}
+                  draggable
+                  onDragEnd={(e) => {
+                    const offsetX = clampOffset(((e.target.x() - bw / 2) / bw) * 100);
+                    const offsetY = clampOffset(((e.target.y() - bh / 2) / bh) * 100);
+                    e.target.position({
+                      x: bw / 2 + (bw * offsetX) / 100,
+                      y: bh / 2 + (bh * offsetY) / 100,
+                    });
+                    onPlacement?.({ offsetX, offsetY });
+                  }}
                 />
-              ) : (
-                <>
-                  <Text
-                    x={25}
-                    y={90}
-                    text="A LITTLE DAILY PRACTICE"
-                    fontSize={10}
-                    letterSpacing={1.5}
-                    fill="#63715c"
-                    fontFamily="Outfit Variable"
-                  />
-                  <Text
-                    x={24}
-                    y={125}
-                    width={bw - 48}
-                    text={'Make room\nfor yourself.'}
-                    fontSize={43}
-                    lineHeight={1.1}
-                    fill="#244b35"
-                    fontFamily="Georgia"
-                  />
-                  <Rect
-                    x={24}
-                    y={245}
-                    width={bw - 48}
-                    height={o.landscape ? 90 : 195}
-                    fill="#d8e1c7"
-                    cornerRadius={18}
-                  />
-                  <Circle
-                    x={bw / 2}
-                    y={o.landscape ? 288 : 340}
-                    radius={o.landscape ? 32 : 68}
-                    fill="#9ba985"
-                  />
-                  <Line
-                    points={[
-                      bw / 2,
-                      390,
-                      bw / 2,
-                      290,
-                      bw / 2 - 24,
-                      268,
-                      bw / 2,
-                      310,
-                      bw / 2 + 30,
-                      275,
-                    ]}
-                    stroke="#47603c"
-                    strokeWidth={3}
-                  />
-                  <Text
-                    x={24}
-                    y={o.landscape ? 0 : 468}
-                    width={bw - 48}
-                    text={
-                      o.landscape
-                        ? ''
-                        : 'Slow down. Breathe a little deeper.\nToday is a good day to begin.'
-                    }
-                    fontSize={13}
-                    lineHeight={1.6}
-                    fill="#61715d"
-                    fontFamily="Outfit Variable"
-                  />
-                  {!o.landscape && (
-                    <>
-                      <Rect
-                        x={24}
-                        y={535}
-                        width={bw - 48}
-                        height={30}
-                        fill="#244b35"
-                        cornerRadius={10}
-                      />
-                      <Text
-                        x={24}
-                        y={544}
-                        width={bw - 48}
-                        text="Find your moment  →"
-                        align="center"
-                        fontSize={11}
-                        fill="#f4f6ed"
-                        fontFamily="Outfit Variable"
-                      />
-                    </>
-                  )}
-                </>
-              )}
-              {o.status && (
-                <>
+              ) : !o.src ? (
+                <Group listening={false}>
                   <Rect
                     width={bw}
-                    height={49}
-                    fill={o.statusDark ? '#f7f7ef' : '#244b35'}
-                    opacity={0.92}
+                    height={bh}
+                    fillLinearGradientStartPoint={{ x: 0, y: 0 }}
+                    fillLinearGradientEndPoint={{ x: bw * 0.8, y: bh }}
+                    fillLinearGradientColorStops={[
+                      0,
+                      '#f36de7',
+                      0.25,
+                      '#8938d6',
+                      0.53,
+                      '#242764',
+                      1,
+                      '#111826',
+                    ]}
+                  />
+                  <Circle
+                    x={bw * 0.7}
+                    y={bh * 0.42}
+                    radius={bw * 0.65}
+                    fill="#4f4cbd"
+                    opacity={0.18}
+                  />
+                  <Rect
+                    x={20}
+                    y={80}
+                    width={bw - 40}
+                    height={115}
+                    fill="#15112b"
+                    opacity={0.6}
+                    cornerRadius={23}
                   />
                   <Text
-                    x={23}
+                    x={36}
+                    y={100}
+                    text="YOUR NEXT GREAT IDEA"
+                    fontSize={9}
+                    fill="#e5d7ee"
+                    letterSpacing={1}
+                    fontFamily="Outfit Variable"
+                  />
+                  <Text
+                    x={36}
+                    y={124}
+                    width={bw - 65}
+                    text={'A little space.\nA new perspective.'}
+                    fontSize={22}
+                    lineHeight={1.2}
+                    fill="#fff"
+                    fontFamily="Outfit Variable"
+                  />
+                  {Array.from({ length: 8 }, (_, i) => (
+                    <Rect
+                      key={i}
+                      x={22 + (i % 4) * ((bw - 44) / 4)}
+                      y={230 + Math.floor(i / 4) * 67}
+                      width={(bw - 65) / 4}
+                      height={46}
+                      cornerRadius={13}
+                      fill={['#e5c7ed', '#9ab1eb', '#d7f0c0', '#e2d1bc'][i % 4]}
+                      opacity={0.8}
+                    />
+                  ))}
+                  <Text
+                    x={28}
+                    y={bh - 168}
+                    width={bw - 56}
+                    text={'Your screenshot\ngoes here.'}
+                    fontSize={26}
+                    fontFamily="Outfit Variable"
+                    fill="#fff"
+                    lineHeight={1.18}
+                  />
+                  <Text
+                    x={28}
+                    y={bh - 88}
+                    text="ADD AN IMAGE TO GET STARTED"
+                    fontSize={8}
+                    fill="#d3d6e6"
+                    letterSpacing={0.8}
+                  />
+                </Group>
+              ) : null}
+              {o.status && (
+                <Group listening={false}>
+                  {o.statusBackground && (
+                    <Rect
+                      name="status-background"
+                      width={bw}
+                      height={43}
+                      fill={o.statusBackground}
+                    />
+                  )}
+                  <Text
+                    x={22}
                     y={19}
                     text={o.time}
                     fontSize={12}
                     fontStyle="bold"
                     fill={fg}
-                    fontFamily="Outfit Variable"
+                    fontFamily="Arial"
                   />
                   {o.network !== 'None' && (
-                    <Text x={bw - 90} y={19} text={o.network} fill={fg} fontSize={10} />
+                    <Text x={bw - 96} y={21} text={o.network} fill={fg} fontSize={8} />
                   )}
-                  {o.wifi && <Text x={bw - 64} y={17} text="◔" fill={fg} fontSize={15} />}
+                  {o.wifi && (
+                    <Group x={bw - 57} y={20}>
+                      <Arc
+                        x={0}
+                        y={6}
+                        innerRadius={6}
+                        outerRadius={7.5}
+                        angle={90}
+                        rotation={225}
+                        fill={fg}
+                      />
+                      <Arc
+                        x={0}
+                        y={6}
+                        innerRadius={3}
+                        outerRadius={4.5}
+                        angle={90}
+                        rotation={225}
+                        fill={fg}
+                      />
+                      <Circle x={0} y={6} radius={1} fill={fg} />
+                    </Group>
+                  )}
                   <Rect
-                    x={bw - 39}
-                    y={19}
-                    width={21}
-                    height={10}
+                    x={bw - 40}
+                    y={18}
+                    width={23}
+                    height={12}
                     cornerRadius={3}
                     stroke={fg}
                     strokeWidth={1}
                   />
                   <Rect
-                    x={bw - 37}
-                    y={21}
-                    width={(17 * o.battery) / 100}
-                    height={6}
-                    cornerRadius={1}
+                    x={bw - 38}
+                    y={20}
+                    width={(19 * o.battery) / 100}
+                    height={8}
+                    cornerRadius={1.5}
                     fill={fg}
                   />
-                  <Rect x={bw - 17} y={22} width={2} height={4} fill={fg} />
-                </>
+                  <Rect x={bw - 16} y={22} width={2} height={4} fill={fg} />
+                </Group>
               )}
-              {o.bezel &&
-                (o.device === 'ios' ? (
-                  <Rect
-                    x={bw / 2 - 38}
-                    y={9}
-                    width={76}
-                    height={20}
-                    fill="#172019"
-                    cornerRadius={12}
-                  />
-                ) : (
-                  <Circle x={bw / 2} y={17} radius={5} fill="#172019" />
-                ))}
-              <Rect
-                x={bw / 2 - 40}
-                y={bh - 12}
-                width={80}
-                height={4}
-                cornerRadius={2}
-                fill="#213b28"
-                opacity={0.6}
-              />
+              {o.island && (
+                <Rect
+                  name="dynamic-island"
+                  x={bw / 2 - preset.islandWidth / 2}
+                  y={10}
+                  width={preset.islandWidth}
+                  height={22}
+                  cornerRadius={13}
+                  fill="#050506"
+                  listening={false}
+                />
+              )}
             </Group>
           </Group>
           <Text
-            x={48}
-            y={751}
-            width={704}
-            text="DESIGN PREVIEW  ·  ORIGINAL GENERIC DEVICE FRAME  ·  FORMA"
+            x={40}
+            y={752}
+            width={720}
+            text="DESIGN PREVIEW  ·  ORIGINAL IPHONE-STYLE FRAME  ·  FORMA"
             align="center"
             fontFamily="Outfit Variable"
-            fontSize={11}
-            letterSpacing={1}
-            fill="#52634c"
+            fontSize={9}
+            letterSpacing={1.2}
+            fill={foreground}
           />
         </Layer>
       </Stage>

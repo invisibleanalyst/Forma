@@ -3,6 +3,7 @@ import fs from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 test('opens the framed image and downloads the same original mockup bytes', async ({ page }) => {
   await page.goto('/mockups');
+  await page.getByText('Reference mockup', { exact: true }).click();
   await page.getByRole('button', { name: 'View framed screenshot', exact: true }).click();
   const dialog = page.getByRole('dialog', { name: 'Your framed screenshot', exact: true });
   await expect(dialog.getByAltText('Full framed screenshot mockup')).toBeVisible();

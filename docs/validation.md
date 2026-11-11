@@ -54,3 +54,22 @@ The change does not implement OCR or automatic editing of rasterized screenshot 
 The generated iPhone 17-style mockup is bundled as one static PNG. Mockup Studio provides a viewer and original-file download; it does not expose its transaction text as editable fields. The original generated file is retained outside the repository as well.
 
 Validation includes TypeScript, lint, production build and focused desktop/phone browser checks for opening/closing the viewer, loading the image and downloading bytes with the same SHA-256 as the bundled asset. Existing mockup rendering/export and responsive-overflow cases are included in the focused regression run. The v5 screenshots show the new viewer.
+
+## Studio-first update (v6)
+
+The default route and `/mockups` now use the iPhone-focused studio. Android and the former marketing-led homepage are removed from the primary flow; legacy editor and saved-project routes remain accessible through More. iPhone 15/16/17 presets are original illustrative artwork. No current verified iPhone 18 frame is supplied. Light, existing Dark and new true-black themes are selectable and persisted.
+
+Executed checks for this iteration:
+
+- 19 unit tests passed, including contain/cover image geometry, screen-relative zoom/offsets, visual preset dimensions and placement reset/bounds.
+- Production browser regression run: 24 passed, with two intentional device-specific skips.
+- New desktop and phone flows exercise upload, mouse/touch dragging, fit/fill, zoom, offsets, rotation/reset, frame finish, optional island/status bar, status-area replacement, and PNG download.
+- The exported PNG is decoded at exactly 1600 × 1600. A pixel check verifies the chosen top-status-area color is actually rendered in the download.
+- Theme reload checks cover both Dark and Black, including a computed true-black page background.
+- Responsive-overflow checks cover 320, 390, 430, 768, 1024 and 1440 CSS pixels. Existing local project/history/export, educational template, and original fixed-image download regressions pass.
+- TypeScript, lint and production build passed. The production offline legacy-editor smoke check passed.
+- Five v6 screenshots capture the studio in Light, Dark and Black, a Silver-frame variant and the mobile layout.
+
+Validation found and corrected an export accessible-name mismatch, upload-readiness timing, and a mobile pointer-coordinate mismatch caused by CSS-stretched canvas sizing. The responsive Stage now uses actual display dimensions; a separate canonical-scene export preserves output size and image placement. Touch input is tested using Chromium's synthetic touchscreen events, not inferred from desktop mouse behavior.
+
+Screen-detail controls only change the device presentation and optionally overlay the screenshot's top status area. Main screenshot text remains raster pixels. Studio state resets on refresh; saved theme preferences persist. This iteration is not physical-device, Safari/WebKit, Firefox, exact hardware, or formal accessibility certification. No production deployment is performed by these local changes.

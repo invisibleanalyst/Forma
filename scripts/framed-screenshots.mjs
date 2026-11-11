@@ -21,6 +21,7 @@ try {
     colorScheme: 'light',
   });
   await page.goto(base + '/mockups');
+  await page.getByText('Reference mockup', { exact: true }).click();
   await page.getByRole('button', { name: 'View framed screenshot', exact: true }).waitFor();
   await page.evaluate(() => document.fonts.ready);
   await page.locator('.framed-example-card img').evaluate((i) => i.decode());
@@ -31,6 +32,7 @@ try {
   const context = await browser.newContext({ ...devices['iPhone 13'], colorScheme: 'light' });
   const phone = await context.newPage();
   await phone.goto(base + '/mockups');
+  await phone.getByText('Reference mockup', { exact: true }).click();
   await phone.getByRole('button', { name: 'View framed screenshot', exact: true }).click();
   await phone.evaluate(() => document.fonts.ready);
   await phone.getByAltText('Full framed screenshot mockup').evaluate((i) => i.decode());

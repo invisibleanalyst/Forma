@@ -1129,14 +1129,6 @@ svg {
   width: 100%;
   height: 100%;
 }
-.mockup-canvas-container .konvajs-content {
-  width: 100% !important;
-  height: 100% !important;
-}
-.mockup-canvas-container canvas {
-  width: 100% !important;
-  height: 100% !important;
-}
 .mockup-preview-label {
   position: absolute;
   left: 20px;
@@ -2846,4 +2838,819 @@ svg {
   .framed-example-card .eyebrow {
     font-size: 8px;
   }
+}
+/* Studio-first interface. The original editor tokens remain available on legacy routes. */
+:root[data-theme='black'] {
+  --bg: #000;
+  --surface: #09090b;
+  --text: #f5f5f5;
+  --secondary: #a7a7ad;
+  --border: #27272c;
+  --subtle: #151518;
+  --green: #b8f36b;
+  --canvas: #050506;
+  --shadow: 0 20px 70px #0008;
+  color-scheme: dark;
+}
+.theme-select {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 9px;
+  color: var(--secondary);
+  height: 36px;
+}
+.theme-select select {
+  padding: 0 3px;
+  background: transparent;
+  border: 0;
+  width: 70px;
+  font-size: 11px;
+  color: var(--text);
+}
+.studio-header {
+  height: 77px;
+  padding: 20px 48px;
+  max-width: 1560px;
+  gap: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.studio-header .logo {
+  font-size: 27px;
+}
+.studio-header-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--border);
+  margin: 0 1px 0 9px;
+}
+.studio-header-label {
+  font-size: 12px;
+  color: var(--secondary);
+}
+.studio-header .header-actions {
+  gap: 16px;
+}
+.workspace-menu {
+  position: relative;
+  font-size: 11px;
+}
+.workspace-menu > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 7px 8px;
+  color: var(--secondary);
+}
+.workspace-menu > summary::-webkit-details-marker {
+  display: none;
+}
+.studio-header .workspace-menu > nav {
+  position: absolute;
+  right: 0;
+  top: 38px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 150px;
+  align-items: stretch;
+  padding: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  box-shadow: var(--shadow);
+  z-index: 20;
+  font-size: 12px;
+}
+.workspace-menu nav a {
+  padding: 10px;
+  border-radius: 5px;
+}
+.workspace-menu nav a:hover {
+  background: var(--subtle);
+}
+.studio-page {
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: 32px 48px 44px;
+}
+.studio-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin: 0 0 27px;
+}
+.studio-heading .eyebrow {
+  font-size: 9px;
+  letter-spacing: 1.6px;
+}
+.studio-heading h1 {
+  font-size: 35px;
+  letter-spacing: -1.2px;
+  line-height: 1.25;
+  font-weight: 450;
+  margin-top: 9px;
+}
+.studio-heading h1 span {
+  color: var(--secondary);
+}
+.studio-heading p {
+  font-size: 12px;
+  color: var(--secondary);
+  margin-top: 10px;
+}
+.studio-export {
+  font-size: 12px;
+  padding: 12px 17px;
+  gap: 10px;
+  min-height: 43px;
+  border-radius: 8px;
+}
+.studio-export > span {
+  font-size: 9px;
+  opacity: 0.7;
+  padding-left: 10px;
+  margin-left: 4px;
+  border-left: 1px solid currentColor;
+}
+.studio-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 326px;
+  gap: 26px;
+  align-items: start;
+}
+.studio-stage-column {
+  min-width: 0;
+  position: sticky;
+  top: 22px;
+}
+.studio-preview {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--subtle);
+  overflow: hidden;
+  padding: 13px 15px;
+}
+.studio-preview-top,
+.studio-preview-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 9px;
+  color: var(--secondary);
+  gap: 12px;
+  height: 24px;
+}
+.studio-preview-top > span:first-child,
+.studio-preview-bottom > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.studio-preview-top > span:last-child {
+  font-size: 9px;
+}
+.studio-preview .mockup-canvas-container {
+  width: min(100%, calc(100dvh - 310px));
+  margin: 10px auto 9px;
+  border-radius: 9px;
+}
+.studio-preview-bottom > span:last-child {
+  font-size: 8px;
+}
+.studio-assurances {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  color: var(--secondary);
+  font-size: 9px;
+  padding: 16px 0;
+}
+.studio-assurances > span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.studio-assurances svg {
+  color: var(--green);
+}
+.studio-settings {
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: var(--surface);
+  padding: 0 21px;
+  max-height: calc(100dvh - 208px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+  overscroll-behavior: contain;
+}
+.studio-panel-title {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 20px 0;
+}
+.studio-panel-title > svg {
+  color: var(--green);
+}
+.studio-panel-title > h2 {
+  font-size: 13px;
+  font-weight: 450;
+  letter-spacing: -0.15px;
+}
+.studio-panel-title > span {
+  margin-left: auto;
+  font-size: 9px;
+  color: var(--secondary);
+}
+.studio-section {
+  border-top: 1px solid var(--border);
+  padding: 20px 0;
+}
+.studio-section-heading {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  margin-bottom: 17px;
+}
+.studio-section-heading > span {
+  font-size: 9px;
+  color: var(--secondary);
+  width: 21px;
+  height: 21px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+.studio-section-heading > h3 {
+  font-size: 12px;
+  font-weight: 450;
+}
+.phone-presets {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.phone-presets > button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-direction: column;
+  padding: 16px 4px 13px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  border-radius: 8px;
+  position: relative;
+}
+.phone-presets > button.active {
+  border-color: var(--green);
+  background: var(--subtle);
+}
+.phone-presets > button strong {
+  font-size: 10px;
+  font-weight: 400;
+}
+.phone-presets > button > svg {
+  position: absolute;
+  right: 5px;
+  top: 6px;
+  color: var(--green);
+}
+.mini-phone {
+  display: block;
+  width: 22px;
+  height: 43px;
+  border: 2px solid #7b807f;
+  border-radius: 6px;
+  background: linear-gradient(140deg, #9a82c7, #24243e);
+  position: relative;
+  box-shadow: inset 0 0 0 1px #17191b;
+}
+.mini-phone.iphone16 {
+  height: 44px;
+  border-radius: 6.5px;
+  background: linear-gradient(140deg, #929fbc, #2c344b);
+}
+.mini-phone.iphone17 {
+  height: 45px;
+  border-radius: 7px;
+  background: linear-gradient(140deg, #b6b69a, #333b31);
+}
+.mini-phone > i {
+  position: absolute;
+  top: 3px;
+  left: 5px;
+  right: 5px;
+  height: 3px;
+  border-radius: 3px;
+  background: #161719;
+}
+.studio-inline-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+.studio-inline-controls .button {
+  flex: 1;
+  font-size: 10px;
+  gap: 6px;
+  padding: 8px 7px;
+  min-height: 34px;
+}
+.studio-frame-select {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  font-size: 9px;
+  color: var(--secondary);
+  max-width: 120px;
+}
+.studio-frame-select select {
+  padding: 7px 5px;
+  font-size: 10px;
+  max-width: 84px;
+}
+.studio-note {
+  font-size: 10px;
+  line-height: 1.7;
+  color: var(--secondary);
+  margin-top: 12px;
+}
+.studio-upload {
+  border: 1px dashed var(--border);
+  border-radius: 9px;
+  display: grid;
+  grid-template-columns: 38px 1fr 16px;
+  grid-template-rows: auto auto;
+  column-gap: 9px;
+  text-align: left;
+  padding: 15px 12px;
+  width: 100%;
+  align-items: center;
+  background: var(--bg);
+}
+.studio-upload:hover {
+  border-color: var(--green);
+  background: var(--subtle);
+}
+.studio-upload > span,
+.studio-upload > img {
+  grid-column: 1;
+  grid-row: 1/3;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 41px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--secondary);
+  border-radius: 5px;
+  object-fit: contain;
+}
+.studio-upload > strong {
+  font-size: 11px;
+  font-weight: 450;
+}
+.studio-upload > small {
+  font-size: 8px;
+  color: var(--secondary);
+  margin-top: 4px;
+}
+.studio-upload > svg {
+  grid-column: 3;
+  grid-row: 1/3;
+  color: var(--secondary);
+}
+.placement-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+.placement-heading > span {
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: var(--secondary);
+}
+.placement-heading > button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  color: var(--green);
+}
+.studio-fit {
+  margin-top: 11px;
+}
+.studio-fit > button {
+  font-size: 10px;
+}
+.studio-settings .number-field {
+  margin-top: 8px;
+  height: 35px;
+}
+.studio-settings .field-row .number-field {
+  margin-top: 0;
+}
+.studio-settings .number-field input {
+  font-size: 11px;
+}
+.studio-settings .range-field {
+  font-size: 11px;
+}
+.studio-settings .check-field {
+  font-size: 11px;
+  color: var(--text);
+  min-height: 22px;
+}
+.studio-settings .text-button {
+  margin-top: 8px;
+  font-size: 10px;
+  color: var(--secondary);
+}
+.studio-swatches {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.studio-swatches > button {
+  width: 29px;
+  height: 29px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+.studio-swatches > button[aria-pressed='true'] {
+  outline: 1px solid var(--green);
+  outline-offset: 3px;
+}
+.studio-swatches > .color-field {
+  flex-basis: 100%;
+  margin: 10px 0 0;
+}
+.studio-swatches .color-field input {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+}
+.studio-panel-footer {
+  font-size: 9px;
+  line-height: 1.8;
+  color: var(--secondary);
+  border-top: 1px solid var(--border);
+  padding: 16px 0;
+}
+.status-settings {
+  margin-top: 18px;
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+}
+.status-settings > summary,
+.studio-reference > summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  list-style: none;
+  cursor: pointer;
+  font-size: 11px;
+  gap: 10px;
+}
+.status-settings > summary::-webkit-details-marker,
+.studio-reference > summary::-webkit-details-marker {
+  display: none;
+}
+.status-settings[open] > summary > svg,
+.studio-reference[open] > summary > svg {
+  transform: rotate(90deg);
+}
+.status-settings > summary {
+  color: var(--text);
+}
+.studio-reference {
+  margin-top: 4px;
+}
+.studio-reference > summary {
+  color: var(--secondary);
+  font-size: 10px;
+  justify-content: flex-start;
+  padding: 6px 2px;
+}
+.studio-reference .framed-example-card {
+  margin-top: 13px;
+}
+.studio-reference .framed-example-card h2 {
+  font-size: 18px;
+}
+.studio-reference .framed-example-card p {
+  font-size: 11px;
+}
+.editor-header .theme-select {
+  margin-right: 5px;
+}
+.editor-header .theme-select select {
+  font-size: 10px;
+  width: 58px;
+}
+@media (min-width: 1600px) {
+  .studio-preview .mockup-canvas-container {
+    width: min(100%, 780px);
+  }
+}
+@media (max-width: 1100px) {
+  .studio-header {
+    padding: 20px 30px;
+  }
+  .studio-page {
+    padding: 27px 30px 35px;
+  }
+  .studio-layout {
+    grid-template-columns: minmax(0, 1fr) 298px;
+    gap: 18px;
+  }
+  .studio-settings {
+    padding: 0 17px;
+  }
+  .studio-heading h1 {
+    font-size: 30px;
+  }
+  .studio-preview {
+    padding: 10px;
+  }
+  .studio-assurances {
+    gap: 12px;
+    font-size: 8px;
+  }
+  .studio-preview .mockup-canvas-container {
+    width: 100%;
+    margin: 10px auto;
+  }
+}
+@media (max-width: 767px) {
+  .studio-header {
+    padding: 16px 18px;
+    height: 69px;
+    gap: 13px;
+  }
+  .studio-header .logo {
+    font-size: 25px;
+  }
+  .studio-header .studio-header-divider {
+    margin: 0;
+    width: 1px;
+    height: 18px;
+  }
+  .studio-header-label {
+    font-size: 10px;
+  }
+  .studio-header .header-actions {
+    gap: 7px;
+  }
+  .theme-select {
+    height: 32px;
+    padding: 5px 6px;
+    gap: 4px;
+  }
+  .theme-select > svg {
+    width: 13px;
+  }
+  .theme-select select {
+    font-size: 10px;
+    width: 59px;
+    padding: 0 1px;
+  }
+  .workspace-menu > summary {
+    font-size: 10px;
+    padding: 5px;
+  }
+  .studio-header .workspace-menu > nav {
+    width: 145px;
+    top: 33px;
+  }
+  .studio-page {
+    padding: 25px 18px 35px;
+  }
+  .studio-heading {
+    align-items: flex-start;
+    gap: 18px;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  .studio-heading .eyebrow {
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+  .studio-heading h1 {
+    font-size: 30px;
+    letter-spacing: -1px;
+    margin-top: 8px;
+    line-height: 1.22;
+  }
+  .studio-heading p {
+    font-size: 11px;
+    line-height: 1.7;
+    max-width: 280px;
+    margin-top: 9px;
+  }
+  .studio-export {
+    width: 100%;
+    padding: 11px 15px;
+    min-height: 41px;
+    font-size: 11px;
+    gap: 9px;
+    justify-content: center;
+  }
+  .studio-export > span {
+    font-size: 8px;
+    margin-left: 7px;
+    padding-left: 13px;
+  }
+  .studio-layout {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .studio-stage-column {
+    position: relative;
+    top: 0;
+  }
+  .studio-preview {
+    padding: 9px;
+    border-radius: 12px;
+  }
+  .studio-preview-top,
+  .studio-preview-bottom {
+    font-size: 8px;
+    height: 22px;
+    gap: 6px;
+  }
+  .studio-preview-top > span:last-child,
+  .studio-preview-bottom > span:last-child {
+    font-size: 7px;
+  }
+  .studio-preview .mockup-canvas-container {
+    width: 100%;
+    margin: 7px auto;
+  }
+  .studio-preview-bottom > span:first-child {
+    font-size: 7px;
+    gap: 4px;
+  }
+  .studio-preview-bottom svg {
+    width: 11px;
+  }
+  .studio-assurances {
+    font-size: 8px;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 12px 0;
+  }
+  .studio-assurances > span:last-child {
+    display: none;
+  }
+  .studio-settings {
+    max-height: none;
+    overflow: visible;
+    padding: 0 21px;
+    border-radius: 12px;
+  }
+  .studio-panel-title {
+    padding: 19px 0;
+  }
+  .studio-section {
+    padding: 20px 0;
+  }
+  .studio-section-heading > h3 {
+    font-size: 13px;
+  }
+  .studio-note {
+    font-size: 11px;
+  }
+  .phone-presets > button strong {
+    font-size: 11px;
+  }
+  .phone-presets > button {
+    padding: 18px 7px 14px;
+  }
+  .studio-inline-controls .button {
+    font-size: 11px;
+    padding: 9px;
+  }
+  .studio-frame-select {
+    font-size: 10px;
+    max-width: 130px;
+  }
+  .studio-frame-select select {
+    font-size: 11px;
+    max-width: 95px;
+  }
+  .studio-upload {
+    padding: 18px 13px;
+    grid-template-columns: 41px 1fr 18px;
+  }
+  .studio-upload > strong {
+    font-size: 12px;
+  }
+  .studio-upload > small {
+    font-size: 9px;
+  }
+  .studio-settings .number-field {
+    height: 40px;
+  }
+  .studio-settings .number-field input {
+    font-size: 12px;
+  }
+  .studio-settings .range-field,
+  .studio-settings .check-field {
+    font-size: 12px;
+  }
+  .studio-fit > button {
+    font-size: 11px;
+    height: 35px;
+  }
+  .studio-settings .text-button {
+    font-size: 11px;
+  }
+  .studio-panel-footer {
+    font-size: 10px;
+    padding: 17px 0;
+  }
+  .status-settings > summary {
+    font-size: 12px;
+  }
+  .studio-reference .framed-example-card {
+    padding: 16px;
+    gap: 14px;
+  }
+  .studio-reference .framed-example-card h2 {
+    font-size: 16px;
+  }
+  .editor-header .theme-select {
+    display: none;
+  }
+}
+@media (max-width: 374px) {
+  .studio-header {
+    padding: 15px 12px;
+    gap: 9px;
+  }
+  .studio-header .logo {
+    font-size: 24px;
+    gap: 6px;
+  }
+  .studio-header-label {
+    font-size: 9px;
+  }
+  .studio-header .header-actions {
+    gap: 3px;
+  }
+  .theme-select select {
+    width: 51px;
+    font-size: 9px;
+  }
+  .theme-select {
+    padding: 5px;
+    gap: 3px;
+  }
+  .workspace-menu > summary {
+    padding: 5px 2px;
+    font-size: 9px;
+  }
+  .studio-page {
+    padding: 22px 13px;
+  }
+  .studio-heading h1 {
+    font-size: 27px;
+  }
+  .studio-preview-bottom > span:last-child {
+    font-size: 6px;
+  }
+  .studio-preview-bottom > span:first-child {
+    font-size: 6px;
+  }
+  .studio-assurances {
+    font-size: 7px;
+    gap: 8px;
+  }
+  .studio-settings {
+    padding: 0 17px;
+  }
+  .studio-upload > small {
+    font-size: 8px;
+  }
+  .studio-reference .framed-example-card > img {
+    max-width: 50px;
+  }
+}
+
+.studio-preview .mockup-canvas-container {
+  touch-action: none;
 }

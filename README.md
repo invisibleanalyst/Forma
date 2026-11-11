@@ -1,100 +1,86 @@
-# Forma
+# Forma — iPhone Mockup Studio
 
-A private, browser-based creative workspace for editing images, designing with text and shapes, and presenting interface mockups. Built from the [product specification](docs/product-specification.md) as a working first release.
+A focused, browser-based workspace for presenting screenshots inside iPhone-style frames. Choose a frame, upload an image, adjust its placement, and download a finished mockup. No account or backend is required.
 
-**[Browse the screenshot version gallery →](docs/screenshots/README.md)**
+**[Browse screenshots and visual version history →](docs/screenshots/README.md)**
 
-![Forma homepage](docs/screenshots/v3/01-home-desktop.png)
+![Forma Mockup Studio](docs/screenshots/v6/03-studio-black.png)
 
-## Run locally
+## Start the app
 
-Use Node.js 24 LTS (Node 22+ supported) and npm.
+Use Node.js 24 LTS (Node 22+ supported) and npm:
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Open the development server at port 3000. No API keys, accounts, database server, or environment variables are needed. The font, sample illustration, and app icons are bundled locally.
+The app runs on port 3000. No API keys, credentials, database server or environment variables are needed. Fonts and artwork are bundled locally.
+
+## The studio workflow
+
+Both `/` and `/mockups` open Mockup Studio directly. The marketing-led homepage has been replaced with the actual workspace.
+
+1. **Choose your iPhone:** original iPhone 15-, 16- or 17-style visual presets, portrait/landscape orientation, and Graphite/Silver finish. These are illustrative frames, not official Apple assets or exact hardware specifications. No Android preset is offered. iPhone 18 is omitted because a current verified frame is unavailable in this implementation.
+2. **Add your screen:** upload or drop a PNG, JPEG or WebP image (up to 20 MB and 40 megapixels). Fit the whole image or fill/crop the screen; adjust zoom, horizontal/vertical position and rotation. Drag the image inside the frame to reposition it. Reset restores the full-image fit and zeroes placement adjustments.
+3. **Set the scene:** choose a backdrop color, toggle the bezel/shadow, and optionally add a plain Dynamic Island and normal status bar with time, Wi-Fi and battery controls. No active-call timer is generated. Status overlays are switched off when an image is uploaded to avoid duplicating its own status details. If an upload already contains an active-call indicator, enable the standard status bar and **Replace screenshot status area**, then choose a matching background color. This intentionally overlays the top status area; the main screenshot content stays in place.
+4. **Export:** download a 1600 × 1600 PNG. Export is independent of the displayed preview size and includes a design-preview caption outside the phone.
+
+The default full-image fit can leave space around an image whose aspect ratio differs from the screen. **Fill screen** crops that space; placement controls let you choose which part stays visible. Rotation and zoom affect the whole screenshot.
+
+**Images remain pixels.** The studio does not extract or automatically erase text or other content already present in an uploaded screenshot. The optional top-status-area replacement is an explicit overlay, not text reconstruction. The image can be positioned inside the frame without turning its transaction fields into editable controls.
+
+Current studio images/settings live in memory and reset on refresh. Theme preferences persist. Use export to keep a finished mockup.
+
+## Light, Dark and Black themes
+
+The header theme selector offers:
+
+- **Light** — the original warm light interface.
+- **Dark** — the existing green-tinted dark palette.
+- **Black** — a deeper neutral palette with a true-black page background.
+
+The selected theme survives reloads. With no saved preference, the app starts from the system color preference. Studio backdrop color is separate from the interface theme, so a theme change does not change the exported scene.
+
+## Existing workspaces
+
+The **More** menu keeps **Saved projects** (`/projects`) and the **Image editor** (`/editor`) accessible. Existing IndexedDB projects are retained; no database migration or deletion is performed. These routes still support text/shapes/images, layers, history, editable-project saving and PNG/JPEG/WebP exports.
+
+The legacy educational transaction layout is available from Saved projects and `/editor?template=transaction-demo`. Its fictional values remain editable, with permanent demonstration markings in the editor and exported image. Imported raster screenshots do not become editable text.
+
+The fixed framed-image example is under **Reference mockup** in the studio. Its viewer downloads the bundled PNG without rewriting it; it does not expose its transaction text as editable fields.
+
+## Validation
 
 ```sh
+npm test
 npm run typecheck
 npm run lint
-npm test
 npm run test:e2e
 npm run build
 npm start
-# In another terminal, validate cached editing offline:
-npm run test:offline
 ```
 
-Playwright uses `/usr/bin/chromium` in this cloud environment. On another machine, install Chromium through Playwright (`npx playwright install chromium`) and set `CHROMIUM_PATH` to your browser executable, or update `playwright.config.ts` to use Playwright's installed browser. `BASE_URL` can point tests and screenshots at an already running production server. The test server uses localhost; the dev configuration also permits 127.0.0.1.
+Playwright uses `/usr/bin/chromium` in the cloud environment. On another machine, install a supported Chromium and set `CHROMIUM_PATH`, or configure Playwright's browser installation. `BASE_URL` can target an already running production server.
 
-## What works in v1
-
-- Responsive homepage with a live canvas preview, new-project presets/custom dimensions, image-open flow, drag-and-drop, and light/dark themes with a saved preference.
-- `/editor`: a real Konva canvas with selection, move, resize, rotation, wheel/trackpad navigation, fit/reset, pan tool and touch pinch/two-finger pan. An original, editable botanical project opens by default.
-- Editable text with Outfit, Georgia, Arial, and Courier New; content, size, weight/style, alignment, tracking, line height, color and opacity controls.
-- Rectangles, rounded rectangles, ellipses and lines; fill, stroke, corner radius, opacity, position, size and rotation.
-- PNG, JPEG and WebP import with type/size/decoding checks. Image brightness, contrast, saturation, flips and nondestructive percentage-edge cropping. Images remain embedded in editable projects.
-- Layers with selection, renaming, show/hide, lock/unlock, ordering, duplication and deletion. Edge/center alignment controls. Locked layers cannot be dragged or transformed.
-- Up to 60 undo snapshots with redo; dragging/resizing creates one history entry per completed interaction. Keyboard shortcuts: Ctrl/⌘ Z, Ctrl/⌘ Shift Z, Ctrl/⌘ Y, Ctrl/⌘ S, Ctrl/⌘ D, Delete/Backspace, arrows (Shift for 10px), V, H and Escape.
-- `/projects`: IndexedDB save/reopen, rename, duplicate and confirmed deletion; debounced autosave after changes, manual Save and storage failure feedback. Saving an editable project is separate from downloading an image.
-- PNG, JPEG and browser-supported WebP export; preview, name, half/original/double resolution, dimension limits, transparent PNG/WebP and white JPEG fallback. Exports use document coordinates independent of viewport zoom, without selection handles or canvas shadow. Native sharing is attempted when supported, with download fallback.
-- `/mockups`: original generic iPhone-style and Android-style frames, portrait/landscape, screenshot placement (cover fit), background, bezel, shadow, time, battery, network, Wi-Fi and status text styling. 1600 × 1600 PNG exports visibly marked as design previews. Transaction-style examples are available separately as permanently marked educational templates.
-- Mobile bottom tools and dismissible properties/layer sheets, safe-area spacing, reduced-motion rules, accessible labels, keyboard-focus outlines and native modal focus handling.
-- PWA manifest, raster app icons, service worker and same-origin visited-asset caching in production. Cached editor functionality can work offline after an online visit and service worker activation.
-
-## Editing a screenshot-style layout (educational template)
-
-Open **Workspace → Open educational template**, or use the editor route `/editor?template=transaction-demo`.
-
-- Choose **Edit template fields** to change the heading, screen time, supporting amount, status, address, price, network, fee, demo ID, timestamp and reference. On phones this opens the properties sheet.
-- Click any text on the canvas or select its layer to change its font, size, alignment, position and other properties. These remain real text layers, not flattened image pixels.
-- Save and reopen the editable project normally. Export PNG, JPEG or WebP with the existing export dialog.
-- The template uses fictional data, simulation status and demo identifiers. It provides no payment verification or blockchain proof links. A visible **DEMO — NOT A REAL TRANSACTION** marking is rendered independently of the layers and reapplied during export. It cannot be removed through layer controls. The minimum demo canvas is 600 × 1000 pixels.
-
-**Importing a PNG/JPEG/WebP does not extract its original text.** An uploaded screenshot is one image layer; its original heading and right-hand values do not become individually editable. This template demonstrates the same kind of layout with editable fictional content. OCR, automatic text detection, background reconstruction and original-font matching are not implemented.
-
-See the [v4 educational screenshots](docs/screenshots/README.md#v4--educational-transaction-layout). Capture a new review version with `node scripts/demo-screenshots.mjs v5` after starting the app (`BASE_URL` can target a production server).
-
-## Framed screenshot example
-
-In **Mockup Studio**, choose **View framed screenshot** to see the generated iPhone 17-style presentation supplied in this conversation. **Download PNG** downloads that existing mockup image, byte for byte. The asset is bundled locally at `public/examples/iphone17-style-framed-screenshot.png`.
-
-This is a single-image viewer/download example. It does not create editable transaction text or replace the separately marked educational template. The frame is a generated visual approximation, not certified device hardware artwork.
-
-See the [v5 review screenshots](docs/screenshots/README.md#v5--framed-image-example). Capture a future version with `node scripts/framed-screenshots.mjs v6` after starting the app.
-
-## Scope and remaining work
-
-This is a working first release, not completion of every production-readiness ambition in the specification.
-
-- Cropping uses percentage controls and a clipped preview, not an interactive crop rectangle. There are no drawing/eraser tools, grid/snap guides, multiselection, group layers, or freehand paths.
-- Rotation uses the canvas handle/property input. Gesture rotation, long-press menus and mobile keyboard avoidance need further work. Native sharing and home-screen installation depend on browser support.
-- Touch and responsive layouts are tested with Chromium phone emulation, including pinch input. Physical iOS/Android devices, Safari/WebKit, Firefox, screen readers, and a formal WCAG audit remain untested. Do not infer native-device compatibility from screenshots.
-- Projects are browser/device-specific. Clearing site data deletes them. There is no cloud sync, account system or portable editable-project file format; export images you want to keep. Browser storage limits and memory still apply.
-- History uses bounded full-document snapshots; very large designs need performance profiling. Images are capped at 20 MB/40 megapixels on import, canvas dimensions at 4096px and export at 32 megapixels.
-- The service worker caches visited functionality, not every possible chunk before first use. Offline installation/update behavior needs broader browser testing. Change the cache version in `public/sw.js` for a new release. The PWA requires HTTPS in deployment (localhost is trusted during development).
-- Unit tests cover the document/history model. Browser tests exercise user flows and exports. Dedicated React Testing Library component coverage, broad accessibility/performance audits and real-device testing are future work.
+The tests cover document/history behavior, educational-template persistence, studio geometry, theme persistence, import, placement/reset, export, existing projects and mobile layouts. See [validation evidence](docs/validation.md) for executed results and limitations. Phone tests use Chromium emulation; physical iPhones, Safari/WebKit, Firefox and a formal accessibility audit are not yet verified.
 
 ## Screenshot versions
 
-Screenshots are real captures of the running application, saved inside the repository. The [gallery](docs/screenshots/README.md) includes desktop, dark theme, phone, projects, export and mockup screens. Original botanical artwork is in `public/botanical.svg`.
-
-After starting the application, capture a **new** version without overwriting earlier versions:
+Real running-app captures are stored under `docs/screenshots/`. Earlier versions remain available for comparison. The latest studio set is v6, including Light, Dark, Black, Silver-frame and mobile views.
 
 ```sh
-npm run screenshots -- v4
-# To capture a production server on another local port:
-BASE_URL=http://localhost:3001 npm run screenshots -- v4
+# Start the app first; choose a fresh version folder.
+npm run screenshots -- v7
+# Or capture a running production instance:
+BASE_URL=http://localhost:3001 npm run screenshots -- v7
 ```
 
-The capture script preserves folders containing `capture.json`. Commit the new folder and add it to the gallery for a visual version history. Never put personal images or private project data in review captures.
+The studio capture script makes a sample screenshot from Forma's original placeholder UI and uploads it through the real file input. Completed version folders are protected from overwriting. Historical scripts and earlier screenshots document the previous product layout.
 
-## Deployment
+## Deployment and offline support
 
-Deploy as a Next.js project on a compatible host such as Vercel, or as a Node.js service:
+Deploy as a Next.js Node service or on a compatible Next.js host:
 
 ```sh
 npm ci
@@ -102,8 +88,18 @@ npm run build
 npm start -- --port 3000
 ```
 
-Serve through HTTPS and a reverse proxy on your chosen domain. All image editing and local project storage run in the client; no backend service or credentials are required. Keep the service worker served at `/sw.js` with revalidation, and serve the manifest and icons from the origin root. The repository includes no production credentials or analytics. Deployment has not been published by this task.
+Use HTTPS in deployment. The app includes a manifest, icons and a production service worker for visited application assets. The cache version is `forma-studio-v6`; bump it for later releases. Offline support requires an earlier online visit and does not promise every route/chunk before first use.
 
-## Architecture
+`BASE_URL=http://localhost:3000 npm run test:offline` checks cached legacy-editor loading, editing and IndexedDB saving against a running production server. The command does not certify all native PWA installation behavior. No deployment is performed by editing these files.
 
-See [implementation plan and module map](docs/implementation-plan.md), [validation evidence](docs/validation.md), and the [original specification](docs/product-specification.md).
+## Module map
+
+- `src/lib/mockup.ts`: typed studio options, visual presets and image-fit geometry.
+- `src/components/mockup-studio.tsx`: upload, controls and export workflow.
+- `src/components/mockup-canvas.tsx`: device renderer, clipped image placement and direct drag handling.
+- `src/components/ui.tsx`: shared navigation and theme selector.
+- `src/lib/document.ts`, `store.ts`, `storage.ts`, `import.ts`, `export.ts`: retained editor and project infrastructure.
+- `tests/`: unit and real-browser regression tests.
+- `scripts/studio-screenshots.mjs`: versioned captures of the current primary workflow.
+
+The original [product specification](docs/product-specification.md) and [implementation notes](docs/implementation-plan.md) are retained as project history. Advanced OCR, automatic text reconstruction, cloud sync, native-device testing and production-scale performance profiling remain outside this first studio-focused iteration.

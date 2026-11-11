@@ -1,14 +1,24 @@
 {
-  "name": "Forma — Your creative workspace",
+  "name": "Forma \u2014 iPhone Mockup Studio",
   "short_name": "Forma",
-  "description": "A private workspace for images and ideas.",
+  "description": "A private browser workspace for iPhone-style device mockups.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "background_color": "#F8F9F6",
   "theme_color": "#244B35",
   "icons": [
-    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
   ]
 }

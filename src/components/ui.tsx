@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { ArrowUpRight, Moon, Sun, X } from 'lucide-react';
+import { Moon, Sun, X } from 'lucide-react';
 export function Logo({ compact = false }: { compact?: boolean }) {
   return (
     <Link href="/" className="logo" aria-label="Forma home">
@@ -19,44 +19,50 @@ export function Logo({ compact = false }: { compact?: boolean }) {
   );
 }
 export function ThemeToggle() {
-  const [dark, setDark] = useState(false);
+  const [theme, setTheme] = useState('light');
   useEffect(() => {
-    setDark(document.documentElement.dataset.theme === 'dark');
+    const current = document.documentElement.dataset.theme;
+    setTheme(current === 'dark' || current === 'black' ? current : 'light');
   }, []);
   return (
-    <button
-      className="icon-button"
-      aria-label="Toggle color theme"
-      title="Toggle color theme"
-      onClick={() => {
-        const next = !dark;
-        setDark(next);
-        document.documentElement.dataset.theme = next ? 'dark' : 'light';
-        localStorage.setItem('forma-theme', next ? 'dark' : 'light');
-      }}
-    >
-      {dark ? <Sun size={18} /> : <Moon size={18} />}
-    </button>
+    <label className="theme-select">
+      {theme === 'light' ? <Sun size={15} /> : <Moon size={15} />}
+      <select
+        aria-label="Color theme"
+        value={theme}
+        onChange={(e) => {
+          const next = e.target.value;
+          setTheme(next);
+          document.documentElement.dataset.theme = next;
+          try {
+            localStorage.setItem('forma-theme', next);
+          } catch {}
+        }}
+      >
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+        <option value="black">Black</option>
+      </select>
+    </label>
   );
 }
 export function Header() {
   return (
-    <header className="site-header">
+    <header className="site-header studio-header">
       <Logo />
-      <nav>
-        <Link href="/#features" className="desktop-link">
-          Features
-        </Link>
-        <Link href="/projects">Workspace</Link>
-        <Link href="/mockups" className="desktop-link">
-          Mockup studio
-        </Link>
-      </nav>
+      <span className="studio-header-divider" />
+      <Link href="/" className="studio-header-label">
+        Mockup studio
+      </Link>
       <div className="header-actions">
         <ThemeToggle />
-        <Link href="/editor" className="button small">
-          Open editor <ArrowUpRight size={16} />
-        </Link>
+        <details className="workspace-menu">
+          <summary>More</summary>
+          <nav aria-label="Other workspaces">
+            <Link href="/projects">Saved projects</Link>
+            <Link href="/editor">Image editor</Link>
+          </nav>
+        </details>
       </div>
     </header>
   );
